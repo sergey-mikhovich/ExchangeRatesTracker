@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">ExchangeRatesTracker</string>
+    <string name="title_popular">Popular</string>
+    <string name="title_favorites">Favorites</string>
+    <string name="title_currency">Currency</string>
+    <string name="content_description_favorite_button">Favorite Button</string>
+    <string name="error_message">Something went wrong</string>
+    <string name="try_again">Try again</string>
+    <string name="empty_list">List is empty</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="sorter_title">Sort by</string>
+    <string name="by_alphabetical_asc">Rate name ascending</string>
+    <string name="by_alphabetical_desc">Rate name descending</string>
+    <string name="by_value_asc">Rate value ascending</string>
+    <string name="by_value_desc">Rate value descending</string>
+</resources>

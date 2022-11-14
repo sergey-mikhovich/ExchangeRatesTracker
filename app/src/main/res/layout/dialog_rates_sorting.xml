@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_margin="@dimen/margin_small">
+
+  <TextView
+      android:id="@+id/sorterTitle"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/sorter_title"
+      android:textAlignment="center"
+      android:textSize="@dimen/large_text"
+      android:textStyle="bold"
+      android:textColor="@android:color/black"
+      android:layout_margin="@dimen/margin_small"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+  <RadioGroup
+    android:id="@+id/filterOptions"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/sorterTitle">
+
+    <RadioButton
+      android:id="@+id/by_alphabetic_asc"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/margin_standard"
+      android:text="@string/by_alphabetical_asc" />
+
+    <RadioButton
+      android:id="@+id/by_alphabetic_desc"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/margin_standard"
+      android:text="@string/by_alphabetical_desc" />
+
+    <RadioButton
+        android:id="@+id/by_value_asc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:text="@string/by_value_asc" />
+
+    <RadioButton
+        android:id="@+id/by_value_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:text="@string/by_value_desc" />
+  </RadioGroup>
+
+  <Button
+      android:id="@+id/cancel"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/margin_small"
+      android:text="@string/cancel"
+      android:textColor="@color/white"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@id/confirm"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/filterOptions" />
+
+  <Button
+      android:id="@+id/confirm"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/margin_small"
+      android:text="@string/confirm"
+      android:textColor="@color/white"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@id/cancel"
+      app:layout_constraintTop_toBottomOf="@id/filterOptions" />
+</androidx.constraintlayout.widget.ConstraintLayout>

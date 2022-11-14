@@ -1,0 +1,34 @@
+<resources>
+
+    <!-- Margin -->
+    <dimen name="margin_xlarge">24dp</dimen>
+    <dimen name="margin_large">20dp</dimen>
+    <dimen name="margin_standard">16dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+
+    <!-- Padding -->
+    <dimen name="padding_xlarge">24dp</dimen>
+    <dimen name="padding_large">20dp</dimen>
+    <dimen name="padding_standard">16dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+
+    <!-- CardView -->
+    <dimen name="card_corner_radius">16dp</dimen>
+    <dimen name="card_corner_radius_small">8dp</dimen>
+    <dimen name="card_elevation">6dp</dimen>
+    <dimen name="stroke_width_standard">1dp</dimen>
+
+    <!-- TextSize -->
+    <dimen name="large_text">20sp</dimen>
+    <dimen name="medium_text">18sp</dimen>
+    <dimen name="normal_text">16sp</dimen>
+    <dimen name="small_text">14sp</dimen>
+    <dimen name="xsmall_text">12sp</dimen>
+
+    <!--Button Size -->
+    <dimen name="standard_button">24dp</dimen>
+    <dimen name="medium_button">28dp</dimen>
+    <dimen name="large_button">32dp</dimen>
+
+    <dimen name="height_app_bar_standard">56dp</dimen>
+</resources>
