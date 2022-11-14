@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/textView"
     android:layout_width="match_parent"
+    android:layout_height="@dimen/height_app_bar_standard"
     android:textColor="@color/black"
     android:textAllCaps="true"
     android:textStyle="bold"
-    android:padding="14dp"
-    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:paddingStart="@dimen/padding_standard"
+    android:paddingEnd="@dimen/padding_standard"
     tools:text="EUR" />

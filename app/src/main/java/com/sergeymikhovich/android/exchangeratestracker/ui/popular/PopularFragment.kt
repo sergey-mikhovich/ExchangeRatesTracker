@@ -93,7 +93,7 @@ class PopularFragment : Fragment() {
                 ArrayAdapter(
                     requireContext(),
                     R.layout.dropdown_item,
-                    exchangeRates.map { it.rateName }
+                    exchangeRates.map { it.rateName }.sortedBy { it }
                 )
             )
         }

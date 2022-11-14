@@ -65,19 +65,20 @@ class FavoritesFragment : Fragment() {
 
         textRateName.setOnItemClickListener { adapterView, _, position, _ ->
             val selectedItem = adapterView.getItemAtPosition(position).toString()
-            mainViewModel.selectedFavoriteSorting = Sorting.NoSorting
-            mainViewModel.selectedFavoriteBase = selectedItem
-            applyFilter(mainViewModel.selectedFavoriteBase)
+            if (mainViewModel.selectedFavoriteBase != selectedItem) {
+                mainViewModel.selectedFavoriteSorting = Sorting.NoSorting
+                mainViewModel.selectedFavoriteBase = selectedItem
+                applyFilter(selectedItem)
+            }
         }
     }
 
     private fun initDropDownMenu(exchangeRates: List<FavoriteExchangeRateEntity>) {
         binding.textRateName.apply {
-            val favoriteBases = exchangeRates.map { it.baseName }.distinct().toMutableList()
-            favoriteBases.add(0, "ALL CURRENCIES")
+            val favoriteBases = exchangeRates.map { it.baseName }.distinct()
 
-            if (favoriteBases.none { baseName -> baseName == mainViewModel.selectedFavoriteBase }) {
-                mainViewModel.selectedFavoriteBase = "ALL CURRENCIES"
+            if (favoriteBases.none { it == mainViewModel.selectedFavoriteBase }) {
+                mainViewModel.selectedFavoriteBase = favoriteBases.minByOrNull { it } ?: ""
             }
 
             setText(mainViewModel.selectedFavoriteBase, false)
@@ -85,7 +86,7 @@ class FavoritesFragment : Fragment() {
                 ArrayAdapter(
                     requireContext(),
                     R.layout.dropdown_item,
-                    favoriteBases
+                    favoriteBases.sortedBy { it }
                 )
             )
         }
@@ -98,7 +99,11 @@ class FavoritesFragment : Fragment() {
 
                 val filteredExchangeRates = exchangeRates
                     .filter { it.baseName == mainViewModel.selectedFavoriteBase }
-                    .ifEmpty { exchangeRates }
+                    .ifEmpty {
+                        exchangeRates.filter { rate ->
+                            rate.baseName == (exchangeRates.minByOrNull { it.baseName }?.baseName ?: "")
+                        }
+                    }
 
                 val sortedExchangeRates = when (sorting) {
                     Sorting.ByAlphabeticAsc -> filteredExchangeRates.sortedBy { it.rateName }
