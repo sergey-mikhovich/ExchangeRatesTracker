@@ -24,14 +24,6 @@ class ExchangeRatesRepositoryImpl @Inject constructor(
         exchangeRatesDao.updateExchangeRate(exchangeRate)
     }
 
-    override suspend fun insertExchangeRate(exchangeRate: ExchangeRateEntity) {
-        exchangeRatesDao.insertExchangeRate(exchangeRate)
-    }
-
-    override suspend fun insertExchangeRates(exchangeRates: List<ExchangeRateEntity>) {
-        exchangeRatesDao.insertExchangeRates(exchangeRates)
-    }
-
     override suspend fun replaceAllExchangeRates(exchangeRates: List<ExchangeRateEntity>) {
         exchangeRatesDao.replaceAllExchangeRates(exchangeRates)
     }
@@ -47,10 +39,6 @@ class ExchangeRatesRepositoryImpl @Inject constructor(
 
     override suspend fun insertFavoriteExchangeRate(favoriteExchangeRate: FavoriteExchangeRateEntity) {
         favoriteExchangeRatesDao.insertFavoriteExchangeRate(favoriteExchangeRate)
-    }
-
-    override suspend fun insertFavoriteExchangeRates(favoriteExchangeRates: List<FavoriteExchangeRateEntity>) {
-        favoriteExchangeRatesDao.insertFavoriteExchangeRates(favoriteExchangeRates)
     }
 
     override suspend fun deleteFavoriteExchangeRate(exchangeRate: FavoriteExchangeRateEntity) {

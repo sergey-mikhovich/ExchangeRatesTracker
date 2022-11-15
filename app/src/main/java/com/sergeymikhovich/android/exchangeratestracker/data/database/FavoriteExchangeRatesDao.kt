@@ -15,9 +15,6 @@ interface FavoriteExchangeRatesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoriteExchangeRate(exchangeRate: FavoriteExchangeRateEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFavoriteExchangeRates(exchangeRates: List<FavoriteExchangeRateEntity>)
-
     @Delete
     suspend fun deleteFavoriteExchangeRate(exchangeRate: FavoriteExchangeRateEntity)
 }

@@ -13,9 +13,6 @@ interface ExchangeRatesDao {
     fun updateExchangeRate(exchangeRate: ExchangeRateEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertExchangeRate(exchangeRate: ExchangeRateEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExchangeRates(exchangeRates: List<ExchangeRateEntity>)
 
     @Query("DELETE FROM exchange_rates_table")

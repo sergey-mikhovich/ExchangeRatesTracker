@@ -139,18 +139,9 @@ class PopularFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.responseState.collect { networkResponse ->
                     when (networkResponse) {
-                        is NetworkResult.Success -> {
-                            hideProgressBar()
-                            if (networkResponse.data!!.isNotEmpty()) {
-                                viewModel.replaceAllExchangeRates(networkResponse.data)
-                            }
-                        }
-                        is NetworkResult.Error -> {
-                            showErrorMessage()
-                        }
-                        is NetworkResult.Loading -> {
-                            showProgressBar()
-                        }
+                        is NetworkResult.Success -> hideProgressBar()
+                        is NetworkResult.Error -> showErrorMessage()
+                        is NetworkResult.Loading -> showProgressBar()
                     }
                 }
             }

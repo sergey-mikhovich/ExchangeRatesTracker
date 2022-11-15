@@ -12,10 +12,6 @@ interface ExchangeRatesRepository {
 
     suspend fun updateExchangeRate(exchangeRate: ExchangeRateEntity)
 
-    suspend fun insertExchangeRate(exchangeRate: ExchangeRateEntity)
-
-    suspend fun insertExchangeRates(exchangeRates: List<ExchangeRateEntity>)
-
     suspend fun replaceAllExchangeRates(exchangeRates: List<ExchangeRateEntity>)
 
 
@@ -24,8 +20,6 @@ interface ExchangeRatesRepository {
     suspend fun updateFavoriteExchangeRate(exchangeRate: FavoriteExchangeRateEntity)
 
     suspend fun insertFavoriteExchangeRate(favoriteExchangeRate: FavoriteExchangeRateEntity)
-
-    suspend fun insertFavoriteExchangeRates(favoriteExchangeRates: List<FavoriteExchangeRateEntity>)
 
     suspend fun deleteFavoriteExchangeRate(exchangeRate: FavoriteExchangeRateEntity)
 

@@ -61,13 +61,7 @@ class PopularViewModel @Inject constructor(
 
     private fun onCacheExchangeRatesResponse(exchangeRateEntities: List<ExchangeRateEntity>) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.insertExchangeRates(exchangeRateEntities)
-        }
-    }
-
-    fun replaceAllExchangeRates(exchangeRates: List<ExchangeRateEntity>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.replaceAllExchangeRates(exchangeRates)
+            repository.replaceAllExchangeRates(exchangeRateEntities)
         }
     }
 
