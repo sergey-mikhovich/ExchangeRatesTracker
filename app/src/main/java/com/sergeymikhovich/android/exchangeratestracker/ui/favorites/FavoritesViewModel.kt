@@ -26,12 +26,13 @@ class FavoritesViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteFavoriteExchangeRate(favoriteExchangeRate)
 
-            cachedExchangeRates.first().forEach { cachedExchangeRate ->
-                if (cachedExchangeRate.rateName == favoriteExchangeRate.rateName &&
-                     cachedExchangeRate.baseName == favoriteExchangeRate.baseName
-                ) {
-                    repository.updateExchangeRate(cachedExchangeRate.copy(isFavorite = false))
-                }
+            val cachedExchangeRate = cachedExchangeRates.first().firstOrNull { cachedExchangeRate ->
+                cachedExchangeRate.rateName == favoriteExchangeRate.rateName &&
+                        cachedExchangeRate.baseName == favoriteExchangeRate.baseName
+            }
+
+            cachedExchangeRate?.let {
+                repository.updateExchangeRate(cachedExchangeRate.copy(isFavorite = false))
             }
         }
     }

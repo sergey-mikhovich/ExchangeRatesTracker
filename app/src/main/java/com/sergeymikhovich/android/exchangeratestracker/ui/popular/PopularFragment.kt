@@ -77,9 +77,11 @@ class PopularFragment : Fragment() {
 
         textRateName.setOnItemClickListener { adapterView, _, position, _ ->
             val selectedItem = adapterView.getItemAtPosition(position).toString()
-            mainViewModel.selectedBase = selectedItem
             mainViewModel.selectedSorting = Sorting.NoSorting
-            viewModel.getRemoteExchangeRates(mainViewModel.selectedBase)
+            if (mainViewModel.selectedBase != selectedItem) {
+                mainViewModel.selectedBase = selectedItem
+                viewModel.getRemoteExchangeRates(mainViewModel.selectedBase)
+            }
         }
     }
 
@@ -112,9 +114,9 @@ class PopularFragment : Fragment() {
                     if (mainViewModel.selectedSorting != sorting) {
                         binding.recyclerView.scrollToPosition(0)
                     }
-                    mainViewModel.listStateParcel?.let {
+                    mainViewModel.recyclerViewStateParcel?.let {
                         (binding.recyclerView.layoutManager as LinearLayoutManager).onRestoreInstanceState(it)
-                        mainViewModel.listStateParcel = null
+                        mainViewModel.recyclerViewStateParcel = null
                     }
                     mainViewModel.selectedSorting = sorting
                 }
@@ -139,7 +141,7 @@ class PopularFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.responseState.collect { networkResponse ->
                     when (networkResponse) {
-                        is NetworkResult.Success -> hideProgressBar()
+                        is NetworkResult.Success -> {}
                         is NetworkResult.Error -> showErrorMessage()
                         is NetworkResult.Loading -> showProgressBar()
                     }
@@ -187,7 +189,7 @@ class PopularFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        mainViewModel.listStateParcel =
+        mainViewModel.recyclerViewStateParcel =
             (binding.recyclerView.layoutManager as LinearLayoutManager).onSaveInstanceState()
         super.onDestroyView()
         _binding = null

@@ -61,7 +61,25 @@ class PopularViewModel @Inject constructor(
 
     private fun onCacheExchangeRatesResponse(exchangeRateEntities: List<ExchangeRateEntity>) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.replaceAllExchangeRates(exchangeRateEntities)
+            val listExchangeRateEntities = exchangeRateEntities.toMutableList()
+            exchangeRateEntities.forEach { exchangeRate ->
+                val favoriteCachedExchangeRate =
+                    favoriteCachedExchangeRates.first().firstOrNull { favoriteExchangeRate ->
+                        favoriteExchangeRate.rateName == exchangeRate.rateName &&
+                                favoriteExchangeRate.baseName == exchangeRate.baseName
+                    }
+
+                favoriteCachedExchangeRate?.let {
+                    repository.updateFavoriteExchangeRate(
+                        favoriteCachedExchangeRate.copy(
+                            rateQuantity = exchangeRate.rateQuantity,
+                            date = exchangeRate.date,
+                            timestamp = exchangeRate.timestamp))
+                    val exchangeRateIndex = exchangeRateEntities.indexOf(exchangeRate)
+                    listExchangeRateEntities[exchangeRateIndex] = exchangeRate.copy(isFavorite = true)
+                }
+            }
+            repository.replaceAllExchangeRates(listExchangeRateEntities)
         }
     }
 
@@ -74,17 +92,7 @@ class PopularViewModel @Inject constructor(
                 }
 
             if (favoriteExchangeRateEntity != null) {
-                if (!exchangeRate.isFavorite) {
-                    repository.updateFavoriteExchangeRate(
-                        favoriteExchangeRateEntity.copy(
-                            rateQuantity = exchangeRate.rateQuantity,
-                            date = exchangeRate.date,
-                            timestamp = exchangeRate.timestamp
-                        )
-                    )
-                } else {
-                    repository.deleteFavoriteExchangeRate(favoriteExchangeRateEntity)
-                }
+                repository.deleteFavoriteExchangeRate(favoriteExchangeRateEntity)
             } else {
                 repository.insertFavoriteExchangeRate(mappers.toFavoriteExchangeRateEntity(exchangeRate))
             }

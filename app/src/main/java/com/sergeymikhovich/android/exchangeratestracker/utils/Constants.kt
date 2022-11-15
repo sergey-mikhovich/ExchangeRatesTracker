@@ -14,7 +14,7 @@ class Constants {
         const val HEADER_API_KEY = "apikey"
 
         //Formats
-        const val DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm:ss"
+        const val DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm"
 
     }
 }

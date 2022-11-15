@@ -116,9 +116,9 @@ class FavoritesFragment : Fragment() {
                     if (mainViewModel.selectedFavoriteSorting != sorting) {
                         binding.recyclerView.scrollToPosition(0)
                     }
-                    mainViewModel.listStateFavoriteParcel?.let {
+                    mainViewModel.recyclerViewStateFavoriteParcel?.let {
                         (binding.recyclerView.layoutManager as LinearLayoutManager).onRestoreInstanceState(it)
-                        mainViewModel.listStateFavoriteParcel = null
+                        mainViewModel.recyclerViewStateFavoriteParcel = null
                     }
                     mainViewModel.selectedFavoriteSorting = sorting
                 }
@@ -174,7 +174,7 @@ class FavoritesFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        mainViewModel.listStateFavoriteParcel =
+        mainViewModel.recyclerViewStateFavoriteParcel =
             (binding.recyclerView.layoutManager as LinearLayoutManager).onSaveInstanceState()
         super.onDestroyView()
         _binding = null
