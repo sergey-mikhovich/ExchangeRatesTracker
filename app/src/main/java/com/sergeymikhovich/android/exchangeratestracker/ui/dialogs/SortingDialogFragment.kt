@@ -1,54 +1,19 @@
-/*
- * Copyright (c) 2020 Razeware LLC
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * Notwithstanding the foregoing, you may not use, copy, modify, merge, publish,
- * distribute, sublicense, create a derivative work, and/or sell copies of the
- * Software in any work that is designed, intended, or marketed for pedagogical or
- * instructional purposes related to programming, coding, application development,
- * or information technology.  Permission for such use, copying, modification,
- * merger, publication, distribution, sublicensing, creation of derivative works,
- * or sale is expressly withheld.
- *
- * This project and source code may use libraries or frameworks that are
- * released under various Open-Source licenses. Use of those libraries and
- * frameworks are governed by their own individual licenses.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
 package com.sergeymikhovich.android.exchangeratestracker.ui.dialogs
 
+import android.os.Build
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.sergeymikhovich.android.exchangeratestracker.R
 import com.sergeymikhovich.android.exchangeratestracker.databinding.DialogRatesSortingBinding
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-class SortingDialogFragment(
-    private val selectedSorting: Sorting,
-    private val onSortingSelected: (Sorting) -> Unit
-) : DialogFragment() {
+class SortingDialogFragment: DialogFragment() {
 
     private var _binding: DialogRatesSortingBinding? = null
     private val binding get() = _binding!!
@@ -76,8 +41,15 @@ class SortingDialogFragment(
         binding.confirm.setOnClickListener { sortingExchangeRates() }
         binding.cancel.setOnClickListener { dismiss() }
 
+        val savedSorting: Sorting = if (Build.VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+            requireArguments().getParcelable(SAVED_SORTING_KEY, Sorting::class.java)
+        } else {
+            requireArguments().getParcelable(SAVED_SORTING_KEY)
+        } ?: Sorting.NoSorting
+
+
         with(binding.filterOptions) {
-            when (selectedSorting) {
+            when (savedSorting) {
                 Sorting.ByAlphabeticAsc -> check(R.id.by_alphabetic_asc)
                 Sorting.ByAlphabeticDesc -> check(R.id.by_alphabetic_desc)
                 Sorting.ByValueAsc -> check(R.id.by_value_asc)
@@ -88,7 +60,7 @@ class SortingDialogFragment(
     }
 
     private fun sortingExchangeRates() {
-        val sorting = when (binding.filterOptions.checkedRadioButtonId) {
+        val selectedSorting = when (binding.filterOptions.checkedRadioButtonId) {
             R.id.by_alphabetic_asc -> Sorting.ByAlphabeticAsc
             R.id.by_alphabetic_desc -> Sorting.ByAlphabeticDesc
             R.id.by_value_asc -> Sorting.ByValueAsc
@@ -96,12 +68,29 @@ class SortingDialogFragment(
             else -> Sorting.NoSorting
         }
 
-        onSortingSelected(sorting)
+        setFragmentResult(
+            REQUEST_SELECTED_SORTING_KEY,
+            bundleOf(SELECTED_SORTING_KEY to selectedSorting)
+        )
         dismiss()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    
+    companion object {
+        private const val SAVED_SORTING_KEY = "saved_sorting_key"
+        const val REQUEST_SELECTED_SORTING_KEY = "request_selected_sorting_key"
+        const val SELECTED_SORTING_KEY = "selected_sorting_key"
+
+        fun newInstance(savedSorting: Sorting): SortingDialogFragment {
+            return SortingDialogFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(SAVED_SORTING_KEY, savedSorting)
+                }
+            }
+        }
     }
 }

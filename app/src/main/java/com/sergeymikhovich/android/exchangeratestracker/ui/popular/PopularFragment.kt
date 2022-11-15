@@ -1,5 +1,6 @@
 package com.sergeymikhovich.android.exchangeratestracker.ui.popular
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,8 @@ import com.sergeymikhovich.android.exchangeratestracker.ui.adapters.ExchangeRate
 import com.sergeymikhovich.android.exchangeratestracker.ui.decorations.SpacingItemDecoration
 import com.sergeymikhovich.android.exchangeratestracker.ui.dialogs.Sorting
 import com.sergeymikhovich.android.exchangeratestracker.ui.dialogs.SortingDialogFragment
+import com.sergeymikhovich.android.exchangeratestracker.ui.dialogs.SortingDialogFragment.Companion.REQUEST_SELECTED_SORTING_KEY
+import com.sergeymikhovich.android.exchangeratestracker.ui.dialogs.SortingDialogFragment.Companion.SELECTED_SORTING_KEY
 import com.sergeymikhovich.android.exchangeratestracker.utils.showSnackBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
@@ -34,6 +37,19 @@ class PopularFragment : Fragment() {
     private val viewModel: PopularViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
     private val adapter by lazy { ExchangeRatesAdapter(viewModel::onFavoriteClick) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        childFragmentManager
+            .setFragmentResultListener(REQUEST_SELECTED_SORTING_KEY, this) { _, bundle ->
+                val selectedSorting = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    bundle.getParcelable(SELECTED_SORTING_KEY, Sorting::class.java)
+                } else {
+                    bundle.getParcelable(SELECTED_SORTING_KEY)
+                } ?: Sorting.NoSorting
+                applySorting(selectedSorting)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,9 +85,9 @@ class PopularFragment : Fragment() {
         }
 
         sortingButton.setOnClickListener {
-            SortingDialogFragment(mainViewModel.selectedSorting) { sorting ->
-                applySorting(sorting)
-            }.show(childFragmentManager, null)
+            SortingDialogFragment
+                .newInstance(mainViewModel.selectedSorting)
+                .show(childFragmentManager, null)
         }
 
         textRateName.setOnItemClickListener { adapterView, _, position, _ ->
