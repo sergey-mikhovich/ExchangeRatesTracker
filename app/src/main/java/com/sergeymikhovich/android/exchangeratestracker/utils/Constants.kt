@@ -10,7 +10,7 @@ class Constants {
 
         // API
         const val BASE_URL = "https://api.apilayer.com"
-        const val API_KEY = "ZgukoYWApBRM1CnEWUmm2Gbjpmzzljps"
+        const val API_KEY = "eauPMzfcrZWnphyLeA6analk18WdLtrE"
         const val HEADER_API_KEY = "apikey"
 
         //Formats

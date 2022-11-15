@@ -4,8 +4,8 @@
     <string name="title_favorites">Favorites</string>
     <string name="title_currency">Currency</string>
     <string name="content_description_favorite_button">Favorite Button</string>
-    <string name="error_message">Something went wrong</string>
     <string name="try_again">Try again</string>
+    <string name="fail_message">Failed to request exchange rates</string>
     <string name="empty_list">List is empty</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>

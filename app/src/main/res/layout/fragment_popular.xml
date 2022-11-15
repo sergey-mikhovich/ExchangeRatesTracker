@@ -27,7 +27,9 @@
         app:layout_constraintBottom_toTopOf="@id/swipeRefresh"
         app:layout_constraintEnd_toStartOf="@id/cardSorting"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
+        tools:visibility="visible">
 
         <AutoCompleteTextView
             android:id="@+id/textRateName"
@@ -53,7 +55,9 @@
         app:layout_constraintTop_toTopOf="@id/cardRateName"
         app:strokeWidth="@dimen/stroke_width_standard"
         app:strokeColor="@color/grey"
-        card_view:cardCornerRadius="@dimen/card_corner_radius_small">
+        card_view:cardCornerRadius="@dimen/card_corner_radius_small"
+        android:visibility="invisible"
+        tools:visibility="visible">
 
         <ImageButton
             android:id="@+id/sortingButton"
@@ -73,7 +77,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardRateName">
+        app:layout_constraintTop_toBottomOf="@id/cardRateName"
+        android:visibility="invisible"
+        tools:visibility="visible">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -88,22 +94,24 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
+        tools:visibility="visible"/>
 
     <LinearLayout
         android:id="@+id/error_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/error_message"
@@ -111,7 +119,8 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/margin_small"
             android:gravity="center"
-            android:text="@string/error_message"
+            android:layout_margin="@dimen/margin_standard"
+            android:text="@string/fail_message"
             android:textSize="@dimen/medium_text"
             android:textStyle="bold" />
 
