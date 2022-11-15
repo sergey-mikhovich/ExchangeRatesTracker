@@ -26,7 +26,7 @@ import com.sergeymikhovich.android.exchangeratestracker.ui.dialogs.SortingDialog
 import com.sergeymikhovich.android.exchangeratestracker.ui.dialogs.SortingDialogFragment.Companion.SELECTED_SORTING_KEY
 import com.sergeymikhovich.android.exchangeratestracker.utils.showSnackBar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -76,7 +76,6 @@ class PopularFragment : Fragment() {
         )
 
         retryButton.setOnClickListener {
-            mainViewModel.selectedSorting = Sorting.NoSorting
             viewModel.getRemoteExchangeRates(mainViewModel.selectedBase)
         }
 
@@ -91,11 +90,10 @@ class PopularFragment : Fragment() {
         }
 
         textRateName.setOnItemClickListener { adapterView, _, position, _ ->
-            val selectedItem = adapterView.getItemAtPosition(position).toString()
-            mainViewModel.selectedSorting = Sorting.NoSorting
-            if (mainViewModel.selectedBase != selectedItem) {
+            val selectedBase = adapterView.getItemAtPosition(position).toString()
+            if (mainViewModel.selectedBase != selectedBase) {
                 swipeRefresh.isRefreshing = true
-                mainViewModel.selectedBase = selectedItem
+                mainViewModel.selectedBase = selectedBase
                 viewModel.getRemoteExchangeRates(mainViewModel.selectedBase)
             }
         }
@@ -103,7 +101,7 @@ class PopularFragment : Fragment() {
 
     private fun initDropDownMenu(exchangeRates: List<ExchangeRateEntity>) {
         binding.textRateName.apply {
-            mainViewModel.selectedBase = exchangeRates.first().baseName
+            mainViewModel.selectedBase = exchangeRates.firstOrNull()?.baseName ?: ""
             setText(mainViewModel.selectedBase, false)
             setAdapter(
                 ArrayAdapter(
@@ -118,7 +116,7 @@ class PopularFragment : Fragment() {
     private fun applySorting(sorting: Sorting) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                val exchangeRates = viewModel.cachedExchangeRates.first()
+                val exchangeRates = viewModel.cachedExchangeRates.firstOrNull() ?: emptyList()
                 val sortedExchangeRates = when (sorting) {
                     Sorting.ByAlphabeticAsc -> exchangeRates.sortedBy { it.rateName }
                     Sorting.ByAlphabeticDesc -> exchangeRates.sortedByDescending { it.rateName }
@@ -143,7 +141,7 @@ class PopularFragment : Fragment() {
     private fun loadData() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                if (viewModel.cachedExchangeRates.first().isEmpty()) {
+                if (viewModel.cachedExchangeRates.firstOrNull()?.isEmpty() == true) {
                     viewModel.getRemoteExchangeRates(mainViewModel.selectedBase)
                 }
                 observeRemoteExchangeRates()
@@ -157,10 +155,16 @@ class PopularFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.responseState.collect { networkResponse ->
                     when (networkResponse) {
-                        is NetworkResult.Success -> {}
+                        is NetworkResult.Success -> {
+                            val currentBase =
+                                viewModel.cachedExchangeRates.firstOrNull()?.firstOrNull()?.baseName
+                            if (mainViewModel.selectedBase != currentBase) {
+                                mainViewModel.selectedSorting = Sorting.NoSorting
+                            }
+                        }
                         is NetworkResult.Error -> {
                             binding.swipeRefresh.isRefreshing = false
-                            if (viewModel.cachedExchangeRates.first().isEmpty()) {
+                            if (viewModel.cachedExchangeRates.firstOrNull()?.isEmpty() == true) {
                                 showErrorMessage()
                             } else {
                                 requireView().showSnackBar(
@@ -169,7 +173,7 @@ class PopularFragment : Fragment() {
                             }
                         }
                         is NetworkResult.Loading -> {
-                            viewModel.cachedExchangeRates.first().ifEmpty { showProgressBar() }
+                            viewModel.cachedExchangeRates.firstOrNull()?.ifEmpty { showProgressBar() }
                         }
                     }
                 }
@@ -182,7 +186,6 @@ class PopularFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.cachedExchangeRates.collect { exchangeRates ->
                     if (exchangeRates.isNotEmpty()) {
-                        binding.swipeRefresh.isRefreshing = false
                         showMainViews()
                         initDropDownMenu(exchangeRates)
                         applySorting(mainViewModel.selectedSorting)
@@ -198,6 +201,7 @@ class PopularFragment : Fragment() {
     }
 
     private fun showMainViews() = with(binding) {
+        swipeRefresh.isRefreshing = false
         progressBar.visibility = View.INVISIBLE
         errorLayout.visibility = View.INVISIBLE
         swipeRefresh.visibility = View.VISIBLE

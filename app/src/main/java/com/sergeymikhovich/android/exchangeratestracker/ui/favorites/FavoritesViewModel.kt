@@ -8,7 +8,7 @@ import com.sergeymikhovich.android.exchangeratestracker.data.database.FavoriteEx
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,7 +26,7 @@ class FavoritesViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteFavoriteExchangeRate(favoriteExchangeRate)
 
-            val cachedExchangeRate = cachedExchangeRates.first().firstOrNull { cachedExchangeRate ->
+            val cachedExchangeRate = cachedExchangeRates.firstOrNull()?.firstOrNull { cachedExchangeRate ->
                 cachedExchangeRate.rateName == favoriteExchangeRate.rateName &&
                         cachedExchangeRate.baseName == favoriteExchangeRate.baseName
             }

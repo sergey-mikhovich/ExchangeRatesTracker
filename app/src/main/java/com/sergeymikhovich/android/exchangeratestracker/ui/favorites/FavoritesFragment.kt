@@ -24,7 +24,7 @@ import com.sergeymikhovich.android.exchangeratestracker.ui.dialogs.SortingDialog
 import com.sergeymikhovich.android.exchangeratestracker.ui.dialogs.SortingDialogFragment.Companion.REQUEST_SELECTED_SORTING_KEY
 import com.sergeymikhovich.android.exchangeratestracker.ui.dialogs.SortingDialogFragment.Companion.SELECTED_SORTING_KEY
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -111,7 +111,7 @@ class FavoritesFragment : Fragment() {
     private fun applySorting(sorting: Sorting) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                val exchangeRates = viewModel.favoriteCachedExchangeRates.first()
+                val exchangeRates = viewModel.favoriteCachedExchangeRates.firstOrNull() ?: emptyList()
 
                 val filteredExchangeRates = exchangeRates
                     .filter { it.baseName == mainViewModel.selectedFavoriteBase }
@@ -145,7 +145,7 @@ class FavoritesFragment : Fragment() {
     private fun applyFilter(baseCurrency: String) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                val favoriteExchangeRates = viewModel.favoriteCachedExchangeRates.first()
+                val favoriteExchangeRates = viewModel.favoriteCachedExchangeRates.firstOrNull() ?: emptyList()
                 val filteredList = favoriteExchangeRates
                     .filter { it.baseName == baseCurrency }
                     .ifEmpty { favoriteExchangeRates }

@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
@@ -50,21 +50,24 @@ class PopularViewModel @Inject constructor(
     ): NetworkResult<List<ExchangeRateEntity>> {
         return when {
             response.isSuccessful -> {
-                val exchangeRatesResponse = response.body()!!
-                val exchangeRatesEntities = mappers.toExchangeRateEntities(exchangeRatesResponse)
-                onCacheExchangeRatesResponse(exchangeRatesEntities)
+                val exchangeRatesResponse = response.body()
+                var exchangeRatesEntities = emptyList<ExchangeRateEntity>()
+                exchangeRatesResponse?.let {
+                    exchangeRatesEntities = mappers.toExchangeRateEntities(exchangeRatesResponse)
+                    onCacheExchangeRates(exchangeRatesEntities)
+                }
                 NetworkResult.Success(exchangeRatesEntities)
             }
             else -> return NetworkResult.Error(response.errorBody().toString())
         }
     }
 
-    private fun onCacheExchangeRatesResponse(exchangeRateEntities: List<ExchangeRateEntity>) {
+    private fun onCacheExchangeRates(exchangeRateEntities: List<ExchangeRateEntity>) {
         viewModelScope.launch(Dispatchers.IO) {
             val listExchangeRateEntities = exchangeRateEntities.toMutableList()
             exchangeRateEntities.forEach { exchangeRate ->
                 val favoriteCachedExchangeRate =
-                    favoriteCachedExchangeRates.first().firstOrNull { favoriteExchangeRate ->
+                    favoriteCachedExchangeRates.firstOrNull()?.firstOrNull { favoriteExchangeRate ->
                         favoriteExchangeRate.rateName == exchangeRate.rateName &&
                                 favoriteExchangeRate.baseName == exchangeRate.baseName
                     }
@@ -86,7 +89,7 @@ class PopularViewModel @Inject constructor(
     fun onFavoriteClick(exchangeRate: ExchangeRateEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             val favoriteExchangeRateEntity =
-                favoriteCachedExchangeRates.first().firstOrNull { favoriteExchangeRate ->
+                favoriteCachedExchangeRates.firstOrNull()?.firstOrNull { favoriteExchangeRate ->
                     favoriteExchangeRate.rateName == exchangeRate.rateName &&
                     favoriteExchangeRate.baseName == exchangeRate.baseName
                 }
