@@ -1,7 +1,6 @@
 package com.sergeymikhovich.android.exchangeratestracker.ui.popular
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.sergeymikhovich.android.exchangeratestracker.R
 import com.sergeymikhovich.android.exchangeratestracker.data.database.ExchangeRateEntity
 import com.sergeymikhovich.android.exchangeratestracker.data.network.NetworkResult
